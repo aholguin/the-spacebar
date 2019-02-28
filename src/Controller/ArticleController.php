@@ -9,10 +9,12 @@
 namespace App\Controller;
 
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+//use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
-class ArticleController
+class ArticleController extends AbstractController
 {
     /**
      * @Route("/")
@@ -25,6 +27,7 @@ class ArticleController
      * @Route("/news/{slug}")
      */
     public function show ($slug){
-        return new Response(sprintf("Variable por URL; %s", $slug));
+        $comments = ["Texto 1", "Texto 2", "Texto 3"];
+        return $this->render("article/show.html.twig",['title'=>$slug, "comments" => $comments ]);
     }
 }
