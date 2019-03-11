@@ -17,17 +17,21 @@ use Symfony\Component\HttpFoundation\Response;
 class ArticleController extends AbstractController
 {
     /**
-     * @Route("/")
+     * @Route("/", name="app_homepage")
      */
     public function  homepage(){
-        return new Response("Working");
+       return $this->render("article/homepage.html.twig");
     }
 
     /**
-     * @Route("/news/{slug}")
+     * @Route("/news/{slug}", name="app_show")
      */
     public function show ($slug){
         $comments = ["Texto 1", "Texto 2", "Texto 3"];
-        return $this->render("article/show.html.twig",['title'=>$slug, "comments" => $comments ]);
+        return $this->render("article/show.html.twig",[
+            'title' => ucwords(str_replace('-', ' ', $slug)),
+            'slug' => $slug,
+            'comments' => $comments,
+        ]);
     }
 }
