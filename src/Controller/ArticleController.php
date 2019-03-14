@@ -10,6 +10,7 @@ namespace App\Controller;
 
 
 //use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -39,8 +40,9 @@ class ArticleController extends AbstractController
     /**
      * @Route("/news/{slug}/heart",name="article_toggle_heart")
      */
-    public function toggleArticleHeart($slug){
+    public function toggleArticleHeart($slug, LoggerInterface $logger){
         //return new Response(json_encode(['hearts'=>5]));
+        $logger->info("Article has been hearted");
         return new JsonResponse(["hearts"=>rand(5,100)]);
     }
 }
