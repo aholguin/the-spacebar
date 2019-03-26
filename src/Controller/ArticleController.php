@@ -58,7 +58,6 @@ EDO;
          }
         $articleContent = $item->get();
         //dump($item); die();
-
         //$articleContent = $markdown->transform($articleContent);
         $comments = ["Texto 1", "Texto 2", "Texto 3"];
         return $this->render("article/show.html.twig", [
