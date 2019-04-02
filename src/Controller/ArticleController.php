@@ -10,9 +10,8 @@ namespace App\Controller;
 
 
 //use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Knp\Bundle\MarkdownBundle\MarkdownParserInterface;
+use App\Service\MarkdownHelper;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,7 +30,7 @@ class ArticleController extends AbstractController
     /**
      * @Route("/news/{slug}", name="app_show")
      */
-    public function show($slug, MarkdownParserInterface $markdown, AdapterInterface $cache)
+    public function show($slug, MarkdownHelper $markdownHelper)
     {
 
         $array = array("10","20","30");
@@ -51,12 +50,8 @@ Integer dapibus molestie augue ac maximus. Fusce ut pulvinar enim, nec fermentum
 massa pharetra sed. Donec a justo tristique, tempus est et,ultricies urna. Morbi aliquam a arcu commodo scelerisque. Aenean non fermentum tortor.
 EDO;
 
-        $item = $cache->getItem('aaaa_'.md5($articleContent));
-         if(!$item->isHit()){
-             $item->set($markdown->transform($articleContent));
-             $cache->save($item);
-         }
-        $articleContent = $item->get();
+
+        $articleContent = $markdownHelper->parse($articleContent);
         //dump($item); die();
         //$articleContent = $markdown->transform($articleContent);
         $comments = ["Texto 1", "Texto 2", "Texto 3"];
