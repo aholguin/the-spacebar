@@ -28,3 +28,6 @@ services:
         tags: ['controller.service_arguments']
 
     # add more service definitions when explicit configuration is needed
+
+    # custom aliases for autowiring
+    Nexy\Slack\Client: '@nexy_slack.client'

@@ -11,6 +11,7 @@ namespace App\Controller;
 
 //use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use App\Service\MarkdownHelper;
+use App\Service\SlackClient;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,6 +20,17 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ArticleController extends AbstractController
 {
+
+    /**
+     * @var bool
+     */
+    private $isDebug;
+
+    public function __construct(bool $isDebug )
+    {
+        $this->isDebug = $isDebug;
+    }
+
     /**
      * @Route("/", name="app_homepage")
      */
@@ -30,8 +42,12 @@ class ArticleController extends AbstractController
     /**
      * @Route("/news/{slug}", name="app_show")
      */
-    public function show($slug, MarkdownHelper $markdownHelper)
+    public function show($slug, MarkdownHelper $markdownHelper, SlackClient $slack )
     {
+
+        if ($slug === 'khaaaaaan'){
+            $slack->sendMessage("AHA","message from service!!");
+        }
 
         $array = array("10","20","30");
         $articleContent = <<<EDO
