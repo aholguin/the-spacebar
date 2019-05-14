@@ -46,30 +46,15 @@ class ArticleController extends AbstractController
     /**
      * @Route("/news/{slug}", name="app_show")
      */
-    public function show($slug, MarkdownHelper $markdownHelper, SlackClient $slack, EntityManagerInterface $em )
+    public function show(Article $article, SlackClient $slack )
     {
 
-        if ($slug === 'khaaaaaan'){
+        if ($article->getSlug() === 'khaaaaaan'){
             $slack->sendMessage("AHA","message from service!!");
         }
 
-        $repository= $em->getRepository(Article::class);
-
-        /** @var Article $article */
-        $article = $repository->findOneBy(['slug'=>$slug]);
-
-        if (!$article){
-        throw $this->createNotFoundException(sprintf('No article for slug "%s"', $slug));
-        }
-
-        $array = array("10","20","30");
-
-
-        //dump($item); die();
-        //$articleContent = $markdown->transform($articleContent);
         $comments = ["Texto 1", "Texto 2", "Texto 3"];
         return $this->render("article/show.html.twig", [
-            'title' => ucwords(str_replace('-', ' ', $slug)),
             'article' => $article,
             'comments' => $comments,
         ]);
