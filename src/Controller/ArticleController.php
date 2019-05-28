@@ -63,10 +63,12 @@ class ArticleController extends AbstractController
     /**
      * @Route("/news/{slug}/heart",name="article_toggle_heart")
      */
-    public function toggleArticleHeart($slug, LoggerInterface $logger)
+    public function toggleArticleHeart(Article $article, LoggerInterface $logger, EntityManagerInterface $em)
     {
         //return new Response(json_encode(['hearts'=>5]));
         $logger->info("Article has been hearted");
-        return new JsonResponse(["hearts" => rand(5, 100)]);
+        $article->incrementHeartCount();
+        $em->flush();
+        return new JsonResponse(["hearts" => $article->getHeartCount()]);
     }
 }
