@@ -1,29 +1,18 @@
 <?php
 
-
-namespace App\Controller;
-
+namespace App\DataFixtures;
 
 use App\Entity\Article;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\Common\Persistence\ObjectManager;
 
-class ArticleAdminController extends AbstractController
+class ArticleFixtures extends BaseFixture
 {
-
-    /**
-     * @Route("/admin/article/new")
-     */
-    public function new(EntityManagerInterface $em)
+    protected function loadData(ObjectManager $manager)
     {
-        die('todo');
-
-        $article = new Article();
-        $article->setTitle("Why Asteroids Taste Like Bacon")
-            ->setSlug('why-asteroids-taste-like-bacon-' . rand(100, 999))
-            ->setContent(<<<EOF
+        $this->createMany(Article::class, 10, function(Article $article, $count) {
+            $article->setTitle("Why Asteroids Taste Like Bacon")
+                ->setSlug('why-asteroids-taste-like-bacon-' . $count)
+                ->setContent(<<<EOF
 Spicy **jalapeno bacon** ipsum dolor amet veniam shank in dolore. Ham hock nisi landjaeger cow,
 lorem proident [beef ribs](https://baconipsum.com/) aute enim veniam ut cillum pork chuck picanha. Dolore reprehenderit
 labore minim pork belly spare ribs cupim short loin in. Elit exercitation eiusmod dolore cow
@@ -39,27 +28,15 @@ strip steak pork belly aliquip capicola officia. Labore deserunt esse chicken lo
 cow est ribeye adipisicing. Pig hamburger pork belly enim. Do porchetta minim capicola irure pancetta chuck
 fugiat.
 EOF
-            );
-
-        // publish most articles
-        if (rand(1, 10) > 2) {
-            $article->setPublishedAt(new \DateTime(sprintf('-%d days', rand(1, 100))));
-        }
-
-        $article->setAuthor("Mike Ferengi")
-            ->setHeartCount(rand(5, 100))
-            ->setImageFilename('asteroid.jpeg');
-
-        $em->persist($article);
-        $em->flush();
-
-
-        return new Response(sprintf(
-            'Hiya! New Article id: #%d slug: %s',
-            $article->getId(),
-            $article->getSlug()
-        ));
-
+                );
+            // publish most articles
+            if (rand(1, 10) > 2) {
+                $article->setPublishedAt(new \DateTime(sprintf('-%d days', rand(1, 100))));
+            }
+            $article->setAuthor("Mike Ferengi")
+                ->setHeartCount(rand(5, 100))
+                ->setImageFilename('asteroid.jpeg');
+        });
+        $manager->flush();
     }
-
 }
